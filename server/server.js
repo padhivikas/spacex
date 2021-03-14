@@ -1,7 +1,7 @@
 import express from 'express'
 import path from 'path'
 import fs from 'fs'
-
+import cors from 'cors'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 
@@ -9,6 +9,8 @@ import App from '../src/App'
 
 const PORT = 8080
 const app = express()
+
+app.use(cors())
 
 const router = express.Router()
 
