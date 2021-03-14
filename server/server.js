@@ -10,31 +10,37 @@ import App from '../src/App'
 const PORT = 8080
 const app = express()
 
-app.use(cors())
+var corsOptions = {
+  origin: ['https://git.heroku.com/spacex-react01.git', 'http://localhost:8080'],
+  methods: "GET",
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+
 
 const router = express.Router()
 
 const serverRenderer = (req, res, next) => {
-    fs.readFile(path.resolve('./build/index.html'), 'utf8', (err, data) => {
-      if (err) {
-        console.error(err)
-        return res.status(500).send('An error occurred')
-      }
-      return res.send(
-        data.replace(
-          '<div id="root"></div>',
-          `<div id="root">${ReactDOMServer.renderToString(<App />)}</div>`
+  fs.readFile(path.resolve('./build/index.html'), 'utf8', (err, data) => {
+    if (err) {
+      console.error(err)
+      return res.status(500).send('An error occurred')
+    }
+    return res.send(
+      data.replace(
+        '<div id="root"></div>',
+        `<div id="root">${ReactDOMServer.renderToString(<App />)}</div>`
         )
+        )
+      })
+    }
+    router.get('^/$', serverRenderer)
+    
+    router.use(
+      express.static(path.resolve(__dirname, '..', 'build'), { maxAge: '30d' })
       )
-    })
-  }
-  router.get('^/$', serverRenderer)
-  
-  router.use(
-    express.static(path.resolve(__dirname, '..', 'build'), { maxAge: '30d' })
-  )
-  
-  // tell the app to use the above rules
+      
+      // tell the app to use the above rules
+  app.use(cors(corsOptions))
   app.use(router)
   
   // app.use(express.static('./build'))
