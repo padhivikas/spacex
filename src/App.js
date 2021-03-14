@@ -37,7 +37,7 @@ function App() {
 
   useEffect(() => {
     axios
-      .delete(API_BASE_URL)
+      .get(API_BASE_URL)
       .then((res) => {
         let years = res.data.map((item) => {
           return item.launch_year;
