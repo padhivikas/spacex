@@ -32,7 +32,7 @@ const serverRenderer = (req, res, next) => {
     );
   });
 };
-router.get("^/$", cors(corsOptions), serverRenderer);
+router.delete("/", cors(corsOptions), serverRenderer);
 
 router.use(
   express.static(path.resolve(__dirname, "..", "build"), { maxAge: "30d" })
